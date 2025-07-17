@@ -9,19 +9,19 @@ import { ExplainTool } from "../metadata/explain.js";
 
 export const FindToolArgs = {
      filter: z
-        .record(z.string(), z.unknown())
+        .object({}).passthrough()
         .optional()
         .describe("The query filter, matching the syntax of the query argument of db.collection.find()"),
     projection: z
-        .record(z.string(), z.unknown())
+        .object({}).passthrough()
         .optional()
         .describe("The projection, matching the syntax of the projection argument of db.collection.find(). Only used when filter is provided."),
     limit: z.number().optional().default(10).describe("The maximum number of documents to return. Only used when filter is provided."),
     sort: z
-        .record(z.string(), z.custom<SortDirection>())
+        .object({}).catchall(z.custom<SortDirection>())
         .optional()
-        .describe("A document, describing the sort order, matching the syntax of the sort argument of cursor.sort(). Only used when filter is provided."),
-    pipeline: z.array(z.record(z.string(), z.unknown())).optional().describe("An array of aggregation stages to execute, matching the syntax of the aggregation pipeline in db.collection.aggregate(). It's ignored in filter is provided."),
+        .describe("A document, describing the sort order, matching the syntax of the sort argument of cursor.sort(). The keys of the object are the fields to sort on, while the values are the sort directions (1 for ascending, -1 for descending). Only used when filter is provided."),
+    pipeline: z.array(z.object({}).passthrough()).optional().describe("An array of aggregation stages to execute, matching the syntax of the aggregation pipeline in db.collection.aggregate(). It's ignored if a filter is provided."),
     explain: z.boolean().optional().default(false).describe("If true, returns the explain plan of the query or aggregation pipeline."),
     count: z.boolean().optional().default(false).describe("If true, returns the count of the documents matching the filter. Only used when filter is provided. For aggregation pipelines, use the $count stage in the pipeline instead."),
 };
@@ -29,7 +29,7 @@ export const FindToolArgs = {
 export class MongoDbFindTool extends MongoDBToolBase {
     public name = "mongodb-find";
     protected description = `
-    This tool retrieves documents, the explain plan or the count of documents from MongoDB collections based on an specific filter or an aggregation pipeline, excluding $out and $merge stages.
+    This tool retrieves documents or the count of documents from MongoDB collections based on an specific filter or an aggregation pipeline, excluding $out and $merge stages. This tool MUST be used to retrieve the execution plan of a query or aggregation pipeline.
     `;
 
     protected argsShape = {

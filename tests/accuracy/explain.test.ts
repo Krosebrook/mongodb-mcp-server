@@ -6,12 +6,12 @@ function callsExplain(prompt: string, config: Record<string, unknown>): Accuracy
         prompt: prompt,
         expectedToolCalls: [
             {
-                toolName: "explain",
+                toolName: "mongodb-find",
                 parameters: {
                     database: "mflix",
                     collection: "movies",
-                    ...config,
                     explain: true,
+                    ...config,
                 },
             },
         ],

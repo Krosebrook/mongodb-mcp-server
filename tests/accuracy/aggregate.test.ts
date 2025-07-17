@@ -7,7 +7,11 @@ describeAccuracyTests([
             {
                 toolName: "mongodb-find",
                 parameters: {
-                    pipeline: { $group: { _id: "$release_year", count: { $sum: 1 } } },
+                    database: "mflix",
+                    collection: "movies",
+                    pipeline: [
+                        { $group: { _id: "$release_year", count: { $sum: 1 } } },
+                    ],
                 },
             },
         ],
