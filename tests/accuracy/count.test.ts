@@ -6,10 +6,11 @@ function callsCountToolWithEmptyQuery(prompt: string, database = "mflix", collec
         prompt: prompt,
         expectedToolCalls: [
             {
-                toolName: "count",
+                toolName: "mongodb-find",
                 parameters: {
                     database,
                     collection,
+                    count: true,
                 },
             },
         ],
@@ -20,17 +21,18 @@ function callsCountToolWithQuery(
     prompt: string,
     database = "mflix",
     collection = "movies",
-    query: Record<string, unknown> = {}
+    filter: Record<string, unknown> = {}
 ): AccuracyTestConfig {
     return {
         prompt: prompt,
         expectedToolCalls: [
             {
-                toolName: "count",
+                toolName: "mongodb-find",
                 parameters: {
                     database,
                     collection,
-                    query,
+                    filter,
+                    count: true,
                 },
             },
         ],

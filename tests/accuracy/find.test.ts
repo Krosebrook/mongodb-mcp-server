@@ -6,7 +6,7 @@ function callsFindNoFilter(prompt: string, database = "mflix", collection = "mov
         prompt: prompt,
         expectedToolCalls: [
             {
-                toolName: "find",
+                toolName: "mongodb-find",
                 parameters: {
                     database,
                     collection,
@@ -21,7 +21,7 @@ function callsFindWithFilter(prompt: string, filter: Record<string, unknown>): A
         prompt: prompt,
         expectedToolCalls: [
             {
-                toolName: "find",
+                toolName: "mongodb-find",
                 parameters: {
                     database: "mflix",
                     collection: "movies",
@@ -37,7 +37,7 @@ function callsFindWithProjection(prompt: string, projection: Record<string, numb
         prompt: prompt,
         expectedToolCalls: [
             {
-                toolName: "find",
+                toolName: "mongodb-find",
                 parameters: {
                     database: "mflix",
                     collection: "movies",
@@ -57,7 +57,7 @@ function callsFindWithProjectionAndFilters(
         prompt: prompt,
         expectedToolCalls: [
             {
-                toolName: "find",
+                toolName: "mongodb-find",
                 parameters: {
                     database: "mflix",
                     collection: "movies",
@@ -79,7 +79,7 @@ function callsFindWithFilterSortAndLimit(
         prompt: prompt,
         expectedToolCalls: [
             {
-                toolName: "find",
+                toolName: "mongodb-find",
                 parameters: {
                     database: "mflix",
                     collection: "movies",

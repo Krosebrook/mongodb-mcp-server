@@ -1,7 +1,7 @@
 import { describeAccuracyTests } from "./sdk/describeAccuracyTests.js";
 import { AccuracyTestConfig } from "./sdk/describeAccuracyTests.js";
 
-function callsExplain(prompt: string, method: Record<string, unknown>): AccuracyTestConfig {
+function callsExplain(prompt: string, config: Record<string, unknown>): AccuracyTestConfig {
     return {
         prompt: prompt,
         expectedToolCalls: [
@@ -10,7 +10,8 @@ function callsExplain(prompt: string, method: Record<string, unknown>): Accuracy
                 parameters: {
                     database: "mflix",
                     collection: "movies",
-                    method: [method],
+                    ...config,
+                    explain: true,
                 },
             },
         ],
@@ -19,30 +20,22 @@ function callsExplain(prompt: string, method: Record<string, unknown>): Accuracy
 
 const callsExplainWithFind = (prompt: string) =>
     callsExplain(prompt, {
-        name: "find",
-        arguments: {
-            filter: { release_year: 2020 },
-        },
+        filter: { release_year: 2020 },
     });
 
 const callsExplainWithAggregate = (prompt: string) =>
     callsExplain(prompt, {
-        name: "aggregate",
-        arguments: {
-            pipeline: [
+        pipeline: [
                 {
                     $match: { release_year: 2020 },
                 },
-            ],
-        },
+        ],
     });
 
 const callsExplainWithCount = (prompt: string) =>
     callsExplain(prompt, {
-        name: "count",
-        arguments: {
-            query: { release_year: 2020 },
-        },
+        filter: { release_year: 2020 },
+        count: true,
     });
 
 /**
